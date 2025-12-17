@@ -13,7 +13,7 @@ import (
 type CLI struct {}
 
 func Run(list store.ExpenseLister) {
-	
+	list.ShowList()
 	scanner:= bufio.NewScanner(os.Stdin)
 	fmt.Println("Welcome to Expensive Tracker")
 	fmt.Println("Typing 'info' for help")
@@ -62,6 +62,8 @@ func Run(list store.ExpenseLister) {
 
 			list.Add(time.DateOnly, inputArgs[2], amount, list.GetId())
 			continue
+		case "list":
+			
 		case "exit":
 			fmt.Println()
 			fmt.Println("We will hope you comeback later!")

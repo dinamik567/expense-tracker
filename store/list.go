@@ -17,10 +17,10 @@ type ExpenseLister interface {
 	Delete(id string)
 	Summury() float64
 	GetId() string
+	ShowList()
 }
 
 type ExpenseList map[string]Expense
-
 
 func GetList() ExpenseList {
 	var data, err = store.ReadFile()
@@ -33,6 +33,8 @@ func GetList() ExpenseList {
 	return data
 }
 
+var List = GetList()
+
 func (expList ExpenseList) GetId() string {
 	if len(expList) == 0 {
 		return "1"
@@ -44,6 +46,12 @@ func (expList ExpenseList) GetId() string {
 func (expList ExpenseList) Add(date string, description string, amount float64, id string) {
 	expList[id] = Expense{date, description, amount}
 	store.SaveDate(expList)
+}
+
+func (expList ExpenseList) ShowList() {
+	for ind, value:= range List {
+		fmt.Println(ind, value.Date, value.Description, value.Amount)
+	}
 }
 
 func (expList ExpenseList) Delete(id string) {
