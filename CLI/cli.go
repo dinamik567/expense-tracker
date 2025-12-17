@@ -13,7 +13,7 @@ import (
 type CLI struct {}
 
 func Run(list store.ExpenseLister) {
-	list.ShowList()
+	
 	scanner:= bufio.NewScanner(os.Stdin)
 	fmt.Println("Welcome to Expensive Tracker")
 	fmt.Println("Typing 'info' for help")
@@ -31,25 +31,21 @@ func Run(list store.ExpenseLister) {
 		case "add":
 			if (inputArgs[1] != flags.description) {
 				getMessageWronFlag(flags.description)
-				getInstruction()
 				continue
 			}
 
 			if (inputArgs[3] != flags.amount) {
 				getMessageWronFlag(flags.amount)
-				getInstruction()
 				continue
 			}
 
 			if (!checkValidInputValueForEmpty(inputArgs[2])) {
 				getMessageWronValidInputValue("description")
-				getInstruction()
 				continue
 			}
 
 			if (!checkValidInputValueForEmpty(inputArgs[4])) {
 				getMessageWronValidInputValue("amount")
-				getInstruction()
 				continue
 			}
 
@@ -63,7 +59,22 @@ func Run(list store.ExpenseLister) {
 			list.Add(time.DateOnly, inputArgs[2], amount, list.GetId())
 			continue
 		case "list":
-			
+			list.ShowList()
+		case "delete":
+			if (len(inputArgs) != 2) {
+				getMessageWronValidInputValue("id")
+				continue
+			}
+			if (!checkValidInputValueForEmpty(inputArgs[1])) {
+				getMessageWronValidInputValue("id")
+				continue
+			}
+
+			ok:= list.Delete(inputArgs[1])
+
+			if !ok {
+				fmt.Println("Something wrong try again")
+			}
 		case "exit":
 			fmt.Println()
 			fmt.Println("We will hope you comeback later!")
@@ -73,6 +84,7 @@ func Run(list store.ExpenseLister) {
 			continue
 		}
 		
+		fmt.Println()
 		fmt.Print("> ")
 	}
 

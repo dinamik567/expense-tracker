@@ -14,7 +14,7 @@ type Expense struct {
 
 type ExpenseLister interface {
 	Add(date string, description string, amount float64, id string)
-	Delete(id string)
+	Delete(id string) bool
 	Summury() float64
 	GetId() string
 	ShowList()
@@ -49,14 +49,24 @@ func (expList ExpenseList) Add(date string, description string, amount float64, 
 }
 
 func (expList ExpenseList) ShowList() {
+	fmt.Println()
 	for ind, value:= range List {
 		fmt.Println(ind, value.Date, value.Description, value.Amount)
 	}
 }
 
-func (expList ExpenseList) Delete(id string) {
-	delete(expList, id)
+func (expList ExpenseList) Delete(id string) bool {
+	_, ok := List[id]
+	
+	if ok {
+		delete(expList, id)
+		store.SaveDate(List)
+	}
+	
+	return ok
 }
+
+
 
 func (expList ExpenseList) Summury() float64 {
 	var sum float64 = 0
