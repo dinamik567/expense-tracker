@@ -1,11 +1,15 @@
 package store
 
-import "strconv"
+import (
+	"fmt"
+	"os"
+	"strconv"
+)
 
 type Expense struct {
-	date        string
-	description string
-	amount      float64
+	Date        string `json:"date"`
+	Description string `json:"description"`
+	Amount      float64 `json:"amount"`
 }
 
 type ExpenseLister interface {
@@ -17,10 +21,16 @@ type ExpenseLister interface {
 
 type ExpenseList map[string]Expense
 
-var list = make(ExpenseList)
 
 func GetList() ExpenseList {
-	return list
+	var data, err = store.ReadFile()
+
+	if err != nil {
+		fmt.Println("Wrong reading file")
+		os.Exit(1)
+	}
+
+	return data
 }
 
 func (expList ExpenseList) GetId() string {
@@ -33,6 +43,7 @@ func (expList ExpenseList) GetId() string {
 
 func (expList ExpenseList) Add(date string, description string, amount float64, id string) {
 	expList[id] = Expense{date, description, amount}
+	store.SaveDate(expList)
 }
 
 func (expList ExpenseList) Delete(id string) {
@@ -42,7 +53,7 @@ func (expList ExpenseList) Delete(id string) {
 func (expList ExpenseList) Summury() float64 {
 	var sum float64 = 0
 	for _, value := range expList {
-		sum += value.amount
+		sum += value.Amount
 	}
 
 	return sum
@@ -50,11 +61,4 @@ func (expList ExpenseList) Summury() float64 {
 
 // func (expList *ExpenseList) SummuryForMonth() {
 
-// }
-
-// ??? не уверен что метод необходим
-// func CreateNewExp(date string, description string, amount float64) Expense {
-// 	exp := Expense{date, description, amount}
-
-// 	return exp
 // }

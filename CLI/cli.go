@@ -63,6 +63,7 @@ func Run(list store.ExpenseLister) {
 			list.Add(time.DateOnly, inputArgs[2], amount, list.GetId())
 			continue
 		case "exit":
+			fmt.Println()
 			fmt.Println("We will hope you comeback later!")
 			return
 		default:

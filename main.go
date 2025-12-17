@@ -8,10 +8,8 @@ import (
 
 
 func main() {
-	
 	list:= store.GetList()
 	cli.Run(list)
-
 }
 
 

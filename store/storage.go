@@ -1,25 +1,32 @@
 package store
 
 import (
-    "fmt"
-    "os"
-    "path/filepath"
-    "runtime"
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
+	"runtime"
 )
 
 type Storage struct {
 	filePath string
 }
 
-var MyStorage = Storage{"store.txt"}
+type Store interface {
+	NewStorage()
+	ReadFile()
+	SaveDate()
+}
+
+var store = NewStorage()
 
 func NewStorage() *Storage {
     _, filename, _, _ := runtime.Caller(0)
     dir := filepath.Dir(filename)  // Путь к папке store/
-    return &Storage{filepath.Join(dir, "store.txt")}
+    return &Storage{filepath.Join(dir, "store.json")}
 }
 
-func (storage *Storage) ReadFile() ([]byte, error) {
+func (storage *Storage) ReadFile() (ExpenseList, error) {
 	file, err := os.ReadFile(storage.filePath)
 
 	if err != nil {
@@ -27,11 +34,28 @@ func (storage *Storage) ReadFile() ([]byte, error) {
 		return nil, err
 	}
 
-	return file, err
+	var data ExpenseList
+
+	err = json.Unmarshal(file, &data)
+
+	if err != nil {
+		fmt.Println("Error converting data to json format", err)
+		os.Exit(1)
+	}
+
+	return data, err
 }
 
-func (storage *Storage) SaveDate(data []byte) error {
-	err:=  os.WriteFile(storage.filePath, data, 0644)
+func (storage *Storage) SaveDate(data ExpenseList) error {
+	jsonObject, err:= json.Marshal(data)
+
+	if err != nil {
+		fmt.Println("Error converting data to json format")
+		os.Exit(1)
+	}
+
+	err =  os.WriteFile(storage.filePath, jsonObject, 0644)
+
 	if err != nil {
 		fmt.Println("Ошибка записи файла", err)
 		return err
