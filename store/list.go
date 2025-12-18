@@ -22,7 +22,7 @@ type ExpenseLister interface {
 
 type ExpenseList map[string]Expense
 
-func GetList() ExpenseList {
+func GetDate() (ExpenseList, int) {
 	var data, err = store.ReadFile()
 
 	if err != nil {
@@ -30,10 +30,13 @@ func GetList() ExpenseList {
 		os.Exit(1)
 	}
 
-	return data
+	return data.Expenses, data.Id
 }
 
-var List = GetList()
+
+
+var List, NextId = GetDate()
+
 
 func (expList ExpenseList) GetId() string {
 	if len(expList) == 0 {
@@ -43,9 +46,10 @@ func (expList ExpenseList) GetId() string {
 	}
 }
 
+
 func (expList ExpenseList) Add(date string, description string, amount float64, id string) {
-	expList[id] = Expense{date, description, amount}
-	store.SaveDate(expList)
+	List[id] = Expense{date, description, amount}
+	store.SaveDate(Date{List, NextId + 1})
 }
 
 func (expList ExpenseList) ShowList() {
@@ -56,17 +60,15 @@ func (expList ExpenseList) ShowList() {
 }
 
 func (expList ExpenseList) Delete(id string) bool {
-	_, ok := List[id]
+	_, ok := expList[id]
 	
 	if ok {
 		delete(expList, id)
-		store.SaveDate(List)
+		store.SaveDate(Date{List, NextId})
 	}
 	
 	return ok
 }
-
-
 
 func (expList ExpenseList) Summury() float64 {
 	var sum float64 = 0

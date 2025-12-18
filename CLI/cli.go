@@ -13,13 +13,13 @@ import (
 type CLI struct {}
 
 func Run(list store.ExpenseLister) {
-	
 	scanner:= bufio.NewScanner(os.Stdin)
 	fmt.Println("Welcome to Expensive Tracker")
 	fmt.Println("Typing 'info' for help")
-	fmt.Print("> ")
-	
+
 	for {
+		fmt.Println()
+		fmt.Print("> ")
 		scanner.Scan()
 		input:= scanner.Text()
 		inputArgs:= strings.Fields(input)
@@ -60,8 +60,9 @@ func Run(list store.ExpenseLister) {
 				getMessageWronValidInputValue("amount")
 				continue
 			}
-
-			list.Add(time.DateOnly, inputArgs[2], amount, list.GetId())
+			id:= list.GetId()
+			fmt.Println(id)
+			list.Add(time.DateOnly, inputArgs[2], amount,id)
 			continue
 		case "list":
 			list.ShowList()
@@ -80,6 +81,18 @@ func Run(list store.ExpenseLister) {
 			if !ok {
 				fmt.Println("Something wrong try again")
 			}
+		case "summury":
+			if len(inputArgs) == 1 {
+				amount:= list.Summury()
+				fmt.Println("amount of all expenses", amount)
+			}
+
+			if len(inputArgs) == 2 {
+
+			} else {
+				continue
+			}
+			
 		case "exit":
 			fmt.Println()
 			fmt.Println("We will hope you comeback later!")
@@ -89,8 +102,6 @@ func Run(list store.ExpenseLister) {
 			continue
 		}
 		
-		fmt.Println()
-		fmt.Print("> ")
 	}
 
 }

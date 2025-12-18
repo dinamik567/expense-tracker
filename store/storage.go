@@ -12,6 +12,11 @@ type Storage struct {
 	filePath string
 }
 
+type Date struct {
+	Expenses  ExpenseList
+	Id int
+}
+
 type Store interface {
 	NewStorage()
 	ReadFile()
@@ -26,15 +31,15 @@ func NewStorage() *Storage {
     return &Storage{filepath.Join(dir, "store.json")}
 }
 
-func (storage *Storage) ReadFile() (ExpenseList, error) {
+func (storage *Storage) ReadFile() (Date, error) {
 	file, err := os.ReadFile(storage.filePath)
 
 	if err != nil {
 		fmt.Println("Ошибка чтения, файла", err)
-		return nil, err
+		return Date{}, err
 	}
 
-	var data ExpenseList
+	var data Date
 
 	err = json.Unmarshal(file, &data)
 
@@ -46,7 +51,7 @@ func (storage *Storage) ReadFile() (ExpenseList, error) {
 	return data, err
 }
 
-func (storage *Storage) SaveDate(data ExpenseList) error {
+func (storage *Storage) SaveDate(data Date) error {
 	jsonObject, err:= json.Marshal(data)
 
 	if err != nil {
