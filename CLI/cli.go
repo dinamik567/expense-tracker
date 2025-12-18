@@ -29,6 +29,11 @@ func Run(list store.ExpenseLister) {
 		case "info":
 			getInstruction()
 		case "add":
+			if len(inputArgs) != 5 {
+				fmt.Println("Wrong count arguments for commands try again!")
+				continue
+			}
+
 			if (inputArgs[1] != flags.description) {
 				getMessageWronFlag(flags.description)
 				continue
