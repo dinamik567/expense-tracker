@@ -33,10 +33,7 @@ func GetDate() (ExpenseList, int) {
 	return data.Expenses, data.Id
 }
 
-
-
 var List, NextId = GetDate()
-
 
 func (expList ExpenseList) GetId() string {
 	if len(expList) == 0 {
@@ -79,6 +76,22 @@ func (expList ExpenseList) Summury() float64 {
 	return sum
 }
 
-// func (expList *ExpenseList) SummuryForMonth() {
+func (expList *ExpenseList) SummuryForMonth(month int) {
+	date, err:= getTime(int64(month))
 
-// }
+	if err != nil {
+		fmt.Println("Error format an input time")
+	}
+
+	var sum float64 = 0
+	
+
+	for _, expense:= range List {
+		expenseDate, _:= getTimeFromString(expense.Date)
+		if (expenseDate.Month() == date.Month()) {
+			sum+= expense.Amount
+		}
+	}
+
+	fmt.Println("Expense for input month",sum)
+}

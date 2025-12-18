@@ -81,17 +81,25 @@ func Run(list store.ExpenseLister) {
 			if !ok {
 				fmt.Println("Something wrong try again")
 			}
-		case "summury":
+		case "summary":
 			if len(inputArgs) == 1 {
 				amount:= list.Summury()
 				fmt.Println("amount of all expenses", amount)
 			}
 
-			if len(inputArgs) == 2 {
-
-			} else {
+			if len(inputArgs) != 3 {
 				continue
-			}
+			} 
+
+			if inputArgs[1] == "--month" {
+					month, err := strconv.Atoi(inputArgs[2])
+
+					if err != nil {
+						fmt.Println("Something wrong please try again")
+						continue
+					}
+					store.List.SummuryForMonth(month)
+				}
 			
 		case "exit":
 			fmt.Println()

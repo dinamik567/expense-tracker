@@ -16,8 +16,8 @@ var flags = Flags{"--description", "--amount"}
 func getInstruction() {
 	fmt.Println(`
 add       Add a new expense (flags: --description, --amount)
-list      List expenses (flags: --month, --year)
-summary   Show totals (flags: --month, --year)
+list      List expenses
+summary   Show totals a special month --month
 delete    Delete expense by ID (flags: --id)
 info    Show app info and stats
 exit    Exit the application`)
