@@ -2,7 +2,6 @@ package store
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 )
 
@@ -23,12 +22,7 @@ type ExpenseLister interface {
 type ExpenseList map[string]Expense
 
 func GetDate() (ExpenseList, int) {
-	var data, err = store.ReadFile()
-
-	if err != nil {
-		fmt.Println("Wrong reading file")
-		os.Exit(1)
-	}
+	var data, _ = store.ReadFile()
 
 	return data.Expenses, data.Id
 }

@@ -45,7 +45,7 @@ func (storage *Storage) ReadFile() (Date, error) {
 
 	if err != nil {
 		fmt.Println("Error converting data to json format", err)
-		os.Exit(1)
+		return Date{ExpenseList{}, 1}, err
 	}
 
 	return data, err
