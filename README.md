@@ -16,7 +16,7 @@ Go 1.21+
 
 ## Установка
 bash
-git clone https://github.com/yourusername/expense-tracker-cli.git
+git clone [https://github.com/dinamik567/expense-tracker.git]
 cd expense-tracker-cli
 go mod tidy
 go build -o expense-tracker
